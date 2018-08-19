@@ -34,11 +34,19 @@ class Person:
     def __init__ (self,x,y,board):
         self.x=x
         self.y=y
-        board[self.y][self.x]='m'
+        board[self.y][self.x]='/'
+        board[self.y-1][self.x]='O'
 
     def set_mario(self,prevx,prevy,curx,cury,board):
-            board[prevy][prevx] = " "
-            board[cury][curx] = "m"
+        
+        board[prevy][prevx] = " "
+        board[prevy-1][prevx] = " "
+        if(curx%2):
+       		board[cury][curx] = "/"
+        else:
+       		board[cury][curx] = '\\'
+        board[cury-1][curx] = "O"
+
 
     def getchar(self,board):
         def alarmhandler(signum, frame):
@@ -57,7 +65,7 @@ class Person:
             return ''
 
         char = user_input()
-        return char
+        return char;
 
     def movelogic(self,char,board):    
         if(char == 'd'):
@@ -72,11 +80,11 @@ class Person:
             for i in range(0,10):
                 self.y-=1;
                 mario.set_mario(self.x,self.y+1,self.x,self.y,board)
-            # for i in range(0,10):
-            #     self.y+=1;
-            #     set_mario(self.x,self.y-1,self.x,self.y,board)
-                            
-
+        
+        if(char == 'q'): 
+        	quit()
+           
+    
 mb = Board(1000,40)
 mb.initialise()
 mario=Person(70,-4,mb.board)
@@ -85,7 +93,9 @@ while True:
     os.system("clear")
     char = mario.getchar(mb.board)
     mario.movelogic(char,mb.board)
-    if(mario.y < -4):
+
+    if(mario.y < -4):     
         mario.y+=1
         mario.set_mario(mario.x,mario.y-1,mario.x,mario.y,mb.board)
+    
     mb.render_board(mario.x)
