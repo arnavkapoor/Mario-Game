@@ -34,3 +34,11 @@ class DrawScenery:
             for line in fileobj:  
                 mybossenemy.append(line.strip('\n'))
         return mybossenemy;
+
+    def drawsunset():
+        mysunset=[]
+        with open("./images/sunset.txt") as fileobj:
+            for line in fileobj:  
+                mysunset.append(line.strip('\n'))
+        return mysunset;
+
