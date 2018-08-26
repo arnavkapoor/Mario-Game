@@ -28,25 +28,25 @@ class Board:
         self.board[-18:-17,self.width-self._screenwidth-10]='*'
 
         for i in range(1,self.width//3,45):
-            Obstacles.putclouds(self.board,i,2)
+            Render.putclouds(self.board,i,2)
         
         for i in range(self.width//3,2*self.width//3,70):
-            Obstacles.putmountains(self.board,i,2)
+            Render.putmountains(self.board,i,2)
         
         for i in range(1,(2*self.width//3-100),80):
-            Obstacles.putpipes(self.board,i,-8)
+            Render.putpipes(self.board,i,-9)
         
         for i in range(1,2*self.width//3-100,40):
             self.board[-3][i] = 'S'
 
         for i in range(1,2*self.width//3-100,130):
-            Obstacles.putbricks(self.board,i,-14,np.random.randint(2,9))
-            Obstacles.putbricks(self.board,i+3,-14,np.random.randint(2,9))
+            Render.putbricks(self.board,i,-14,np.random.randint(2,9))
+            Render.putbricks(self.board,i+3,-14,np.random.randint(2,9))
         
         for i in range(90 , 2*self.width//3-100,97):
             newenemy = Enemies(self.board,i,-4,"left")
         
-        Obstacles.putsunset(self.board,3*self.width//4+50,10)
+        Render.putsunset(self.board,3*self.width//4+50,10)
         
 
     def render_board(self,curx):        
@@ -64,7 +64,7 @@ class Board:
             ScoreBoard.setlevel("BOSS")
 
 
-class Obstacles:  
+class Render:  
 
     def putclouds(board,x,y):
         mycloud = DrawScenery.drawclouds()
@@ -96,49 +96,3 @@ class Obstacles:
             for col in range(len(mybrick[row])):
                 board[y+row][x+col]=mybrick[row][col];
         board[y+1][x+1]=num;
-      
-
-mb = Board(900,40)
-mb.initialise()
-mario=Person(70,-4,mb.board)
-boss=BossEnemy(5*mb.width//6,-8,mb.board)
-
-elapsedtime = time.time()
-gametime = time.time();
-
-while True:
-    os.system("clear")
-    
-    updatetime = time.time()
-    if(updatetime - elapsedtime > 1):
-        elapsedtime = updatetime
-        if(np.random.randint(1,7)==3):
-            BossEnemy.bullets(mb.board,5*mb.width//6-1)
-        ScoreBoard.timer()
-    try:
-        curlev = 2*float(ScoreBoard.level)
-    except:
-        curlev = 5;
-
-    if(updatetime - gametime > 1/curlev):
-        gametime = updatetime
-        for elements in Enemies.enemylist:
-            Enemies.update_position(mb.board,elements)
-
-    mario.checkdeath(mb.board)
-
-    if(mario.y < -4 and not mario.check_landing(mb.board)):  #simulate gravity    
-        mario.check_kill(mb.board)
-        mario.y+=1
-        mario.set_mario(mario.x,mario.y-1,mario.x,mario.y,mb.board)
-    
-    mb.setlevel(mario.x)
-    char = mario.getchar(mb.board)
-    mario.movelogic(char,mb.board)
-    mb.render_board(mario.x)
-    ScoreBoard.printscore()
-
-    if(boss.eatenboss(mb.board)):
-        break;
-
-ScoreBoard.finalscore()

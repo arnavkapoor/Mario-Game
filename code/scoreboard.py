@@ -21,10 +21,10 @@ class ScoreBoard():
 
     def changescore(capture):
         if capture == 'coins':
-            ScoreBoard.score += 10  #the answer to everything....
+            ScoreBoard.score += 42  #the answer to everything....
 
         if capture == 'enemy':
-            ScoreBoard.score += 100 
+            ScoreBoard.score += 200 
 
     def finalscore():
         ScoreBoard.score = ScoreBoard.score + ScoreBoard.time

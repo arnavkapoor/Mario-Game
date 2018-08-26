@@ -115,15 +115,28 @@ class Person:
                 board[self.y-3][self.x] = val-1;   
                 ScoreBoard.changescore("coins")
 
-    def get
+    def getcoins(self,board,direction):
+        if(direction == "right"):
+            if(board[self.y][self.x+1] == '$'):
+                ScoreBoard.changescore("coins")
+                os.system('aplay -q ./sounds/coins.wav&')
+
+        if(direction == "left"):
+            if(board[self.y][self.x-1] == '$'):
+                ScoreBoard.changescore("coins")
+                os.system('aplay -q ./sounds/coins.wav&')
+        
+        if(direction == "down"):
+            if(board[self.y+1][self.x] == '$'):
+                ScoreBoard.changescore("coins")
+                os.system('aplay -q ./sounds/coins.wav&')
+
     def checkdeath(self,board,status="Alive"):
         if(board[self.y][self.x] == 'E' or board[self.y-1][self.x] == 'E' or status == "Dead"):
            self.y -= 20;
            self.x -= 10;
            self.set_mario(self.x+10,self.y+20,self.x,self.y,board)
            ScoreBoard.changelives() 
-    
-
     
     def check_kill(self,board):
         for elements in Enemies.enemylist:

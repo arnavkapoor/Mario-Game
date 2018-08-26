@@ -1,16 +1,20 @@
 from scenery import DrawScenery
 import numpy as np
-class Enemies:
-    
+
+class SupEnemies:
+    def __init__(self,x,y):
+        self.x=x
+        self.y=y
+
+class Enemies(SupEnemies):    
     enemylist = []
     def __init__(self,board,x,y,direction):
-        self.x=x;
-        self.y=y;
+        super(Enemies,self).__init__(x,y)
         self.direction = direction;
         board[y][x]='E'
         Enemies.enemylist.append(self)
 
-    def update_position(board,each_enemy):
+    def movelogic(board,each_enemy):
         
         status = Enemies.collision_enemies(board,each_enemy)
         
@@ -42,11 +46,10 @@ class Enemies:
             elif(tchar1 != " " and tchar1 != "\\" and tchar1 != "/" and tchar1!='M'):
                 each_enemy.direction = "right"
 
-class BossEnemy:
+class BossEnemy(SupEnemies):
     
     def __init__(self,x,y,board):
-        self.x=x
-        self.y=y
+        super(BossEnemy,self).__init__(x,y)
         myenemy = DrawScenery.drawbossenemy()
         for row in range(len(myenemy)):
             for col in range(len(myenemy[row])):
