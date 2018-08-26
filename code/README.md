@@ -14,6 +14,7 @@ Rules of the Game
 > - Level 2 - Has mountains in the background and medium speed enemy
 > - Boss Level - Has a boss with fastest speed enemy. 
 > - The Boss Level is a unique level where the boss randomly shoots bullets (having the same feature as the enemy at you). To defeat the boss you need to eat and overwrite all the characters of the boss.
+__________________
 
 
 Description of Classes Created
