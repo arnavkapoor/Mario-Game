@@ -19,16 +19,20 @@ Rules of the Game
 Description of Classes Created
 --------------------------------------------
 ####Board:
-The board class creates the entire grid
+The board class creates the entire grid.
+
 ####Draw Scenery:
 This class creates the whole level at once segments of which are displayed during gameplay.
 
 ####People:
-The People class has all the variables and functionality of Mario, this includes the movement and collision checking
+The People class has all the variables and functionality of Mario, this includes the movement and collision checking.
+
 ####Enemies:
-The Enemy class has all the variables and functionality of Mario, this includes the movement and collision checking
+The Enemy class has all the variables and functionality of Mario, this includes the movement and collision checking.
+
 ####BossEnemy:
-The BossEnemy class has all the variables and functionality of Mario, this includes the movement and collision checking 
+The BossEnemy class has all the variables and functionality of Mario, this includes the movement and collision checking. 
+
 ####Scoreboard:
 Scoreboard class manages score, printing, and the killing of Mario.
 
