@@ -19,25 +19,24 @@ __________________
 
 Description of Classes Created
 --------------------------------------------
-####Board:
+#### Board:
 The board class creates the entire grid.
 
-####Draw Scenery:
+#### Draw Scenery:
 This class creates the whole level at once segments of which are displayed during gameplay.
 
-####People:
+#### People:
 The People class has all the variables and functionality of Mario, this includes the movement and collision checking.
 
-####Enemies:
+#### Enemies:
 The Enemy class has all the variables and functionality of Mario, this includes the movement and collision checking.
 
-####BossEnemy:
+#### BossEnemy:
 The BossEnemy class has all the variables and functionality of Mario, this includes the movement and collision checking. 
 
-####Scoreboard:
+#### Scoreboard:
 Scoreboard class manages score, printing, and the killing of Mario.
 
-__________________
 
 How To Play:
 ------------------
@@ -50,7 +49,7 @@ python3 main.py
 
 ___________________
 
-Reqiurements:
+Requirements:
 --------------------
 - Python3
 - NumPy
