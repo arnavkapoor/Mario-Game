@@ -1,4 +1,4 @@
-About the Game.
+About the Game..
 -------------------
 > - Browse this link for minfo : https://en.wikipedia.org/wiki/Super_Mario_Bros
 
