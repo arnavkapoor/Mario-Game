@@ -1,6 +1,6 @@
 About the Game
 -------------------
-> - Browse link for more info : https://en.wikipedia.org/wiki/Super_Mario_Bros
+> - Browse link for  info : https://en.wikipedia.org/wiki/Super_Mario_Bros
 
 Rules of the Game
 -------------------
