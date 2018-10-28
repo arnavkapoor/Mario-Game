@@ -18,7 +18,7 @@ class Person:
         board[self.ycord - 1][self.xcord] = 'M'
 
     def set_mario(self, prevx, prevy, curx, cury, board):
-        """ Set The Co-ordinated of Mario """
+        """ Set The Co-ordinates of Mario """
 
         board[prevy][prevx] = " "
         board[prevy - 1][prevx] = " "

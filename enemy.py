@@ -73,13 +73,10 @@ class BossEnemy:
     def eatenboss(self, board):
         "Defeating the boss"
 
+        myset = [" ", "M", "\\", "/"]
         myenemy = scenery.drawbossenemy()
         for row, _ in enumerate(myenemy):
             for col, _ in enumerate(myenemy[row]):
-                if(board[self.ycord + row][self.xcord + col] != " "
-                   and board[self.ycord + row][self.xcord + col] != "M"
-                   and board[self.ycord + row][self.xcord + col] != "\\"
-                   and board[self.ycord + row][self.xcord + col] != "/"):
-
+                if(board[self.ycord + row][self.xcord + col] not in myset):
                     return False
         return True
