@@ -3,7 +3,7 @@ rendenring objects fuctions to populate the board """
 
 import os
 import numpy as np
-from scenery import DrawScenery
+import scenery
 from scoreboard import ScoreBoard
 from enemy import Enemies
 
@@ -18,12 +18,13 @@ class Board:
         self.height = height
         # screen-width is private cannot be accessed outside the class.
         self._screenwidth = 70
+        self.board = []
+        self.board = np.empty([self.height, self.width], dtype=str)
+        self.board[:, :] = " "
 
     def initialise(self):
         """ Initialising and popoulating the board """
 
-        self.board = np.empty([self.height, self.width], dtype=str)
-        self.board[:, :] = " "
         self.board[-3:, 0:self.width] = '*'
 
         self.board[-17:-3, 2 * self.width // 3] = '{'
@@ -79,7 +80,7 @@ class Board:
 def putclouds(board, xcord, ycord):
     """ puts clouds in the scenery """
 
-    mycloud = DrawScenery.drawclouds()
+    mycloud = scenery.drawclouds()
     for row, _ in enumerate(mycloud):
         for col, _ in enumerate(mycloud[row]):
             board[ycord + row][xcord + col] = mycloud[row][col]
@@ -88,7 +89,7 @@ def putclouds(board, xcord, ycord):
 def putmountains(board, xcord, ycord):
     """ puts mountains in the scenery """
 
-    mymountain = DrawScenery.drawmountains()
+    mymountain = scenery.drawmountains()
     for row, _ in enumerate(mymountain):
         for col, _ in enumerate(mymountain[row]):
             board[ycord + row][xcord + col] = mymountain[row][col]
@@ -97,7 +98,7 @@ def putmountains(board, xcord, ycord):
 def putpipes(board, xcord, ycord):
     """ puts pipes in the scenery """
 
-    mypipe = DrawScenery.drawpipes()
+    mypipe = scenery.drawpipes()
     for row, _ in enumerate(mypipe):
         for col, _ in enumerate(mypipe[row]):
             board[ycord + row][xcord + col] = mypipe[row][col]
@@ -106,7 +107,7 @@ def putpipes(board, xcord, ycord):
 def putsunset(board, xcord, ycord):
     """ puts sunset in the scenery """
 
-    mysunset = DrawScenery.drawsunset()
+    mysunset = scenery.drawsunset()
     for row, _ in enumerate(mysunset):
         for col, _ in enumerate(mysunset[row]):
             board[ycord + row][xcord + col] = mysunset[row][col]
@@ -115,7 +116,7 @@ def putsunset(board, xcord, ycord):
 def putbricks(board, xcord, ycord, num):
     """ puts bricks in the scenery """
 
-    mybrick = DrawScenery.drawbricks()
+    mybrick = scenery.drawbricks()
     for row, _ in enumerate(mybrick):
         for col, _ in enumerate(mybrick[row]):
             board[ycord + row][xcord + col] = mybrick[row][col]

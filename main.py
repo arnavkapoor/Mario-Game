@@ -1,58 +1,63 @@
-import numpy as np
-import signal
+""" the main game loop that calls each of the different functions """
+
 import os
-import sys
 import time
-from getch import _getChUnix as getChar
-from alarmexception import AlarmException
-from scenery import DrawScenery
+import numpy as np
 from scoreboard import ScoreBoard
-from person import *
+from person import Person
 from enemy import Enemies, BossEnemy
+from enemy import create_bullets
 from board import Board
 
-mb = Board(900, 40)
-mb.initialise()
-mario = Person(70, -4, mb.board)
-boss = BossEnemy(5 * mb.width // 6, -8, mb.board)
+MB = Board(900, 40)
+MB.initialise()
+MARIO = Person(70, -4, MB.board)
+BOSS = BossEnemy(5 * MB.width // 6, -8, MB.board)
 
-elapsedtime = time.time()
-gametime = time.time()
+ELAPSED_TIME = time.time()
+GAME_TIME = time.time()
 
 while True:
+
     os.system("clear")
 
-    updatetime = time.time()
-    if(updatetime - elapsedtime > 1):
-        elapsedtime = updatetime
-        if(np.random.randint(1, 7) == 3):
-            BossEnemy.bullets(mb.board, 5 * mb.width // 6 - 1)
+    UPDATE_TIME = time.time()
+    if UPDATE_TIME - ELAPSED_TIME > 1:
+        ELAPSED_TIME = UPDATE_TIME
+        if np.random.randint(1, 7) == 3:
+            create_bullets(MB.board, 5 * MB.width // 6 - 1)
         ScoreBoard.timer()
     try:
-        curlev = 2 * float(ScoreBoard.level)
+        CURLEV = 2 * float(ScoreBoard.level)
     except BaseException:
-        curlev = 5
+        CURLEV = 5
 
-    if(updatetime - gametime > 1 / curlev):
-        gametime = updatetime
+    if UPDATE_TIME - GAME_TIME > 1 / CURLEV:
+        GAME_TIME = UPDATE_TIME
         for elements in Enemies.enemylist:
-            Enemies.movelogic(mb.board, elements)
+            elements.movelogic(MB.board)
 
-    mario.checkdeath(mb.board)
+    MARIO.checkdeath(MB.board)
 
-    if(mario.y < -4 and not mario.check_landing(mb.board)):  # simulate gravity
-        mario.check_kill(mb.board)
-        mario.getcoins(mb.board, "down")
-        mario.y += 1
-        mario.set_mario(mario.x, mario.y - 1, mario.x, mario.y, mb.board)
+    if MARIO.ycord < - \
+            4 and not MARIO.check_landing(MB.board):  # simulate gravity
+        MARIO.check_kill()
+        MARIO.getcoins(MB.board, "down")
+        MARIO.ycord += 1
+        MARIO.set_mario(
+            MARIO.xcord,
+            MARIO.ycord - 1,
+            MARIO.xcord,
+            MARIO.ycord,
+            MB.board)
 
-    mb.setlevel(mario.x)
-    char = mario.getchar(mb.board)
-    mario.movelogic(char, mb.board)
-    mb.render_board(mario.x)
+    MB.setlevel(MARIO.xcord)
+    CHAR = MARIO.getchar(MB.board)
+    MARIO.movelogic(CHAR, MB.board)
+    MB.render_board(MARIO.xcord)
     ScoreBoard.printscore()
 
-    if(boss.eatenboss(mb.board)):
+    if BOSS.eatenboss(MB.board):
         break
 
 ScoreBoard.finalscore()
