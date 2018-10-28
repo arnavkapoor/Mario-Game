@@ -28,7 +28,7 @@ class Person:
             board[cury][curx] = '\\'
         board[cury - 1][curx] = "M"
 
-    def getchar(self):
+    def getchar(self, board):
         def alarmhandler(signum, frame):
             raise AlarmException
 
