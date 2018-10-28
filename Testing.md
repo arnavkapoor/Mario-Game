@@ -17,7 +17,7 @@ Refactoring changes
 Code Smells
 
 1) Identified the different code smells and listed the same in the codereview pdf.
-2) Resolved the God Line (Line 79) in person.py by replacing multiple statements and's in the if statement by a loop.
+2) Resolved the God Line (Line 79) in enemy.py by replacing multiple statements and's in the if statement by a loop.
 
 
 

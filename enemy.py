@@ -77,6 +77,6 @@ class BossEnemy:
         myenemy = scenery.drawbossenemy()
         for row, _ in enumerate(myenemy):
             for col, _ in enumerate(myenemy[row]):
-                if(board[self.ycord + row][self.xcord + col] not in myset):
+                if board[self.ycord + row][self.xcord + col] not in myset:
                     return False
         return True
