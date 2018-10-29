@@ -49,7 +49,7 @@ class Person:
         char = user_input()
         return char
 
-    def movelogic(self, char, board):
+    def movelogic(self, char, board,status="normal"):
         """ Moving character based on input """
 
         if char == 'd':
@@ -101,7 +101,10 @@ class Person:
                         self.check_kill()
 
         if char == 'q':
-            quit()
+            if status == "normal":
+                quit()
+            else:
+                pass
 
     def check_landing(self, board):
         """ checking landing """
