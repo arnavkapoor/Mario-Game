@@ -12,4 +12,4 @@ def test_music():
     MARIO = Person(82, -9, MB.board)
     MARIO.movelogic('q', MB.board,"test")
     ret = os.system('pkill -kill aplay')
-    print(ret)
+    assert ret != 0
