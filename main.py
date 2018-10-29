@@ -56,6 +56,8 @@ while True:
     MARIO.movelogic(CHAR, MB.board)
     MB.render_board(MARIO.xcord)
     ScoreBoard.printscore()
+    print(MARIO.xcord)
+    print(MARIO.ycord)
     if BOSS.eatenboss(MB.board):
         break
 
