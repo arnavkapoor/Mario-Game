@@ -104,6 +104,7 @@ class Person:
             if status == "test":
                 os.system('pkill -kill aplay')
             else:
+                os.system('pkill -kill aplay')  
                 quit()
 
     def check_landing(self, board):
