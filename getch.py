@@ -1,5 +1,6 @@
 '''module to take input'''
 
+
 class _getChUnix:
     '''class to take input'''
 

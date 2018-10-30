@@ -1,31 +1,40 @@
-import signal,os
+""" Main Mario Functionality"""
+import signal
+import os
 import numpy as np
-from enemy import *
+from enemy import Enemies
 from getch import _getChUnix as getChar
 from alarmexception import AlarmException
 from scoreboard import ScoreBoard
-class Person:   
-    def __init__ (self,x,y,board):
-        self.x=x
-        self.y=y
-        board[self.y][self.x]='/'
-        board[self.y-1][self.x]='M'
 
-    def set_mario(self,prevx,prevy,curx,cury,board):
-        
+
+class Person:
+    """ Initialising Mario Class """
+
+    def __init__(self, xcord, ycord, board):
+        self.xcord = xcord
+        self.ycord = ycord
+        board[self.ycord][self.xcord] = '/'
+        board[self.ycord - 1][self.xcord] = 'M'
+
+    def set_mario(self, prevx, prevy, curx, cury, board):
+        """ Set The Co-ordinates of Mario """
+
         board[prevy][prevx] = " "
-        board[prevy-1][prevx] = " "
-        if(curx%2):
+        board[prevy - 1][prevx] = " "
+        if curx % 2:
             board[cury][curx] = "/"
         else:
             board[cury][curx] = '\\'
-        board[cury-1][curx] = "M"
+        board[cury - 1][curx] = "M"
 
-    def getchar(self,board):
+    def getchar(self, board):
         def alarmhandler(signum, frame):
             raise AlarmException
 
         def user_input(timeout=0.10):
+            """ Taking in User Input """
+
             signal.signal(signal.SIGALRM, alarmhandler)
             signal.setitimer(signal.ITIMER_REAL, timeout)
             try:
@@ -38,109 +47,150 @@ class Person:
             return ''
 
         char = user_input()
-        return char;
+        return char
 
-    def movelogic(self,char,board):    
-        
-        if(char == 'd'):
-            if(self.check_collision(board,"right") == "go"):
-                self.getcoins(board,"right")
-                self.x+=1;
-                self.set_mario(self.x-1,self.y,self.x,self.y,board)
+    def movelogic(self, char, board,status = "normal"):
+        """ Moving character based on input """
+
+        if char == 'd':
+            if self.check_collision(board, "right") == "go":
+                self.getcoins(board, "right")
+                self.xcord += 1
+                self.set_mario(
+                    self.xcord - 1,
+                    self.ycord,
+                    self.xcord,
+                    self.ycord,
+                    board)
                 self.checkdeath(board)
 
-            elif(self.check_collision(board,"right") == "dead"):
-                self.checkdeath(board,"Dead")
+            elif self.check_collision(board, "right") == "dead":
+                self.checkdeath(board, "Dead")
 
-        if(char == 'a'):
-            if(self.check_collision(board,"left") == "go"):
-                self.getcoins(board,"left")
-                self.x-=1;
-                self.set_mario(self.x+1,self.y,self.x,self.y,board)
+        if char == 'a':
+            if self.check_collision(board, "left") == "go":
+                self.getcoins(board, "left")
+                self.xcord -= 1
+                self.set_mario(
+                    self.xcord + 1,
+                    self.ycord,
+                    self.xcord,
+                    self.ycord,
+                    board)
                 self.checkdeath(board)
 
-            elif(self.check_collision(board,"left") == "dead"):
-                self.checkdeath(board,"Dead")
+            elif self.check_collision(board, "left") == "dead":
+                self.checkdeath(board, "Dead")
 
-        if(char == 'w' and self.check_landing(board)):    
+        if char == 'w' and self.check_landing(board):
             os.system('aplay -q ./sounds/jump.wav&')
             extra = 0
-            if(board[self.y+1][self.x]=='S'):
-                extra+=5
-            for i in range(0,15+extra):
-                if(self.check_collision(board,"up")):
-                    self.y-=1;
-                    self.set_mario(self.x,self.y+1,self.x,self.y,board)
+            if board[self.ycord + 1][self.xcord] == 'S':
+                extra += 5
+            for _ in range(0, 15 + extra):
+                if self.check_collision(board, "up"):
+                    self.ycord -= 1
+                    self.set_mario(
+                        self.xcord,
+                        self.ycord + 1,
+                        self.xcord,
+                        self.ycord,
+                        board)
                     self.get_brickcoins(board)
-                    if(self.y == -3):
-                        self.check_kill(board)
+                    if self.ycord == -3:
+                        self.check_kill()
 
-        if(char == 'q'): 
-            quit()
+        if char == 'q':
+            if status == "test":
+                os.system('pkill -kill aplay')
+            else:
+                os.system('pkill -kill aplay')  
+                quit()
 
-    def check_landing(self,board):
-        if(board[self.y+1][self.x] == '*' or board[self.y+1][self.x]=='S'):
+    def check_landing(self, board):
+        """ checking landing """
+        if board[self.ycord +
+                 1][self.xcord] == '*' or board[self.ycord +
+                                                1][self.xcord] == 'S':
             return True
         return False
 
-    def check_collision(self,board,direction):
-        if(direction == "right"):
-            tchar1 = board[self.y][self.x+1]
-            tchar2 = board[self.y-1][self.x+1]
-            if((tchar1 == " " or tchar1 == "$") and (tchar2 == " " or tchar2 == "$")):
-                return "go"
-            if(tchar1 == "E" or tchar2 == "E" ):
-                return "dead" 
-            return "stop";
+    def check_collision(self, board, direction):
+        """ collision of mario with surroundings """
 
-        if(direction == "left"):
-            tchar1 = board[self.y][self.x-1]
-            tchar2 = board[self.y-1][self.x-1]
-            if((tchar1 == " " or tchar1 == "$") and (tchar2 == " " or tchar2 == "$")):
+        if direction == "right":
+            tchar1 = board[self.ycord][self.xcord + 1]
+            tchar2 = board[self.ycord - 1][self.xcord + 1]
+            if (tchar1 == " " or tchar1 == "$") and (
+                    tchar2 == " " or tchar2 == "$"):
                 return "go"
-            if(tchar1 == "E" or tchar2 == "E" ):
-                return "dead" 
-            return "stop";
+            if tchar1 == "E" or tchar2 == "E":
+                return "dead"
+            return "stop"
 
-        if(direction == "up"):
-            tchar1 = board[self.y-2][self.x]
-            if(tchar1 == " "):
+        if direction == "left":
+            tchar1 = board[self.ycord][self.xcord - 1]
+            tchar2 = board[self.ycord - 1][self.xcord - 1]
+            if (tchar1 == " " or tchar1 == "$") and (
+                    tchar2 == " " or tchar2 == "$"):
+                return "go"
+            if tchar1 == "E" or tchar2 == "E":
+                return "dead"
+            return "stop"
+
+        if direction == "up":
+            tchar1 = board[self.ycord - 2][self.xcord]
+            if tchar1 == " ":
                 return True
-            return False;
-    
-    def get_brickcoins(self,board):
-        if (np.core.defchararray.isdigit(board[self.y-3][self.x])):
-            val = int(board[self.y-3][self.x]);   
-            if(val!=0):
-                board[self.y-3][self.x] = val-1;   
+            return False
+
+    def get_brickcoins(self, board):
+        """ Get coins by hitting bricks """
+
+        if np.core.defchararray.isdigit(board[self.ycord - 3][self.xcord]):
+            val = int(board[self.ycord - 3][self.xcord])
+            if val != 0:
+                board[self.ycord - 3][self.xcord] = val - 1
                 ScoreBoard.changescore("coins")
 
-    def getcoins(self,board,direction):
-        if(direction == "right"):
-            if(board[self.y][self.x+1] == '$'):
+    def getcoins(self, board, direction):
+        """ Normal Bricks """
+
+        if direction == "right":
+            if board[self.ycord][self.xcord + 1] == '$':
                 ScoreBoard.changescore("coins")
                 os.system('aplay -q ./sounds/coins.wav&')
 
-        if(direction == "left"):
-            if(board[self.y][self.x-1] == '$'):
-                ScoreBoard.changescore("coins")
-                os.system('aplay -q ./sounds/coins.wav&')
-        
-        if(direction == "down"):
-            if(board[self.y+1][self.x] == '$'):
+        if direction == "left":
+            if board[self.ycord][self.xcord - 1] == '$':
                 ScoreBoard.changescore("coins")
                 os.system('aplay -q ./sounds/coins.wav&')
 
-    def checkdeath(self,board,status="Alive"):
-        if(board[self.y][self.x] == 'E' or board[self.y-1][self.x] == 'E' or status == "Dead"):
-           self.y -= 20;
-           self.x -= 10;
-           self.set_mario(self.x+10,self.y+20,self.x,self.y,board)
-           ScoreBoard.changelives() 
-    
-    def check_kill(self,board):
+        if direction == "down":
+            if board[self.ycord + 1][self.xcord] == '$':
+                ScoreBoard.changescore("coins")
+                os.system('aplay -q ./sounds/coins.wav&')
+
+    def checkdeath(self, board, status="Alive"):
+        """ Check death i.e collision with Enemies """
+
+        if board[self.ycord][self.xcord] == 'E' or board[self.ycord -
+                                                         1][self.xcord] == 'E' or status == "Dead":
+            self.ycord -= 20
+            self.xcord -= 10
+            self.set_mario(
+                self.xcord + 10,
+                self.ycord + 20,
+                self.xcord,
+                self.ycord,
+                board)
+            ScoreBoard.changelives()
+
+    def check_kill(self):
+        """ Check killing of enemies """
+
         for elements in Enemies.enemylist:
-            if(self.x == elements.x and self.y+1 == elements.y):
+            if self.xcord == elements.xcord and self.ycord + 1 == elements.ycord:
                 Enemies.enemylist.remove(elements)
                 ScoreBoard.changescore("enemy")
                 os.system('aplay -q ./sounds/kill.wav&')
